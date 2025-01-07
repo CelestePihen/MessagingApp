@@ -1,0 +1,12 @@
+﻿<Window x:Class="MessagerieClient.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Chat Client" Height="450" Width="800">
+    <Grid>
+        <TextBox Name="txtMessage" Height="30" Margin="300,-80,300,0" VerticalAlignment="Center" />
+        <Button Content="Se connecter" Width="100" Height="35" Click="LoginButton"/>
+    </Grid>
+</Window>

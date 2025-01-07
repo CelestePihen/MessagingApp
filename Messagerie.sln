@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagerieClient", "MessagerieClient\MessagerieClient.csproj", "{B63A4869-3D9C-4807-B009-B7778FB18661}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7F1B79F6-56F7-41FF-8119-63BDA7A3C862} = {7F1B79F6-56F7-41FF-8119-63BDA7A3C862}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessagerieServer", "MessagerieServer\MessagerieServer.csproj", "{7F1B79F6-56F7-41FF-8119-63BDA7A3C862}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B63A4869-3D9C-4807-B009-B7778FB18661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B63A4869-3D9C-4807-B009-B7778FB18661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B63A4869-3D9C-4807-B009-B7778FB18661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B63A4869-3D9C-4807-B009-B7778FB18661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F1B79F6-56F7-41FF-8119-63BDA7A3C862}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F1B79F6-56F7-41FF-8119-63BDA7A3C862}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F1B79F6-56F7-41FF-8119-63BDA7A3C862}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F1B79F6-56F7-41FF-8119-63BDA7A3C862}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
