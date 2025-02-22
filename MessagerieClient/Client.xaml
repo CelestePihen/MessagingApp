@@ -6,12 +6,13 @@
         mc:Ignorable="d"
         Title="Chat Client" Height="450" Width="800">
     <Grid>
-        <ListBox Name="listMessages" Margin="10,10,147,60"/>
-        <ListBox Name="connectedClients" Margin="658,10,10,60" Background="#D6D6D6" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-        
+        <ListBox Name="listMessages" Margin="10,10,147,60" />
+        <ListBox Name="connectedClients" Margin="658,10,10,230" Background="#D6D6D6" />
+        <ListBox Name="color" Margin="658,225,10,60" Background="#D6D6D6" />
+
         <TextBox Name="txtMessage" Height="30" Margin="10,0,147,10" VerticalAlignment="Bottom" />
-        
-        <Button Content="Envoyer" Width="132" Height="30" Margin="0,0,10,10" HorizontalAlignment="Right" 
+
+        <Button Content="Envoyer" Width="132" Height="30" Margin="0,0,10,10" HorizontalAlignment="Right"
                 VerticalAlignment="Bottom" Click="SendMessageButton" />
     </Grid>
 </Window>

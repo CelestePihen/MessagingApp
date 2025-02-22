@@ -1,17 +1,17 @@
-﻿namespace MessagerieServer;
-
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-class ChatServer
+namespace MessagerieServer;
+
+internal class ChatServer
 {
     private const int Port = 5000;
     private static TcpListener _listener;
     private static readonly List<TcpClient> Clients = [];
     private static readonly List<string> ClientNames = [];
-    
-    static void Main()
+
+    private static void Main()
     {
         RunServer();
     }
@@ -26,7 +26,7 @@ class ChatServer
 
             while (true)
             {
-                TcpClient client = _listener.AcceptTcpClient();
+                var client = _listener.AcceptTcpClient();
                 Clients.Add(client);
                 Thread clientThread = new(HandleClient) { IsBackground = true };
                 clientThread.Start(client);
@@ -45,10 +45,7 @@ class ChatServer
     private static void StopServer()
     {
         _listener.Stop();
-        foreach (var client in Clients)
-        {
-            client.Close();
-        }
+        foreach (var client in Clients) client.Close();
         Clients.Clear();
         ClientNames.Clear();
         Console.WriteLine("Serveur arrêté");
@@ -56,20 +53,20 @@ class ChatServer
 
     private static void HandleClient(object clientObj)
     {
-        TcpClient client = (TcpClient) clientObj;
+        var client = (TcpClient)clientObj;
         string clientName = null;
         try
         {
-            NetworkStream stream = client.GetStream();
-            byte[] buffer = new byte[1024];
+            var stream = client.GetStream();
+            var buffer = new byte[1024];
 
-            int bytesRead = stream.Read(buffer, 0, buffer.Length);
-            
+            var bytesRead = stream.Read(buffer, 0, buffer.Length);
+
             clientName = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
             ClientNames.Add(clientName);
             Console.WriteLine($"{clientName} s'est connecté");
             BroadcastClientList();
-            
+
             while (true)
             {
                 bytesRead = stream.Read(buffer, 0, buffer.Length);
@@ -79,7 +76,7 @@ class ChatServer
                     break;
                 }
 
-                string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
+                var message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
                 Broadcast($"{clientName} : {message}");
             }
         }
@@ -92,8 +89,9 @@ class ChatServer
             if (clientName != null)
             {
                 ClientNames.Remove(clientName);
-                Clients.Remove(client);   
+                Clients.Remove(client);
             }
+
             client.Close();
             Broadcast($"{clientName} a quitté le chat.");
             BroadcastClientList();
@@ -103,23 +101,19 @@ class ChatServer
     private static void BroadcastClientList()
     {
         var clientListMessage = "/clients" + string.Join(",", ClientNames);
-        byte[] buffer = Encoding.UTF8.GetBytes(clientListMessage);
+        var buffer = Encoding.UTF8.GetBytes(clientListMessage);
 
-        foreach (var stream in Clients.Select(client => client.GetStream()))
-        {
-            stream.Write(buffer, 0, buffer.Length);
-        }
+        foreach (var stream in Clients.Select(client => client.GetStream())) stream.Write(buffer, 0, buffer.Length);
     }
 
     /// <summary>
-    /// Envoie un message à tous les clients
+    ///     Envoie un message à tous les clients
     /// </summary>
     /// <param name="message">Le message à envoyer</param>
     private static void Broadcast(string message)
     {
-        byte[] buffer = Encoding.UTF8.GetBytes(message);
+        var buffer = Encoding.UTF8.GetBytes(message);
         foreach (var client in Clients)
-        {
             try
             {
                 client.GetStream().Write(buffer, 0, buffer.Length);
@@ -128,7 +122,5 @@ class ChatServer
             {
                 // ignored
             }
-        }
     }
-    
 }
