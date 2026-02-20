@@ -1,15 +1,17 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 using System.Windows;
+using System.Windows.Automation.Provider;
+using System.Windows.Controls;
 
 namespace MessagerieClient;
 
-public partial class MainWindow : Window
+public partial class MainWindow
 {
     private readonly string _ip;
     private readonly int _port;
     private TcpClient? _client;
-    private NetworkStream _stream;
+    private NetworkStream? _stream;
 
     public MainWindow(string ip, int port)
     {
@@ -36,33 +38,35 @@ public partial class MainWindow : Window
         }
         catch (SocketException e)
         {
-            MessageBox.Show($"Impossible de se connecter au serveur : {e.Message}", "Erreur de connexion");
+            MessageBox.Show("Impossible de se connecter au serveur : " + e.Message, "Erreur de connexion");
             return false;
         }
         catch (Exception e)
         {
-            MessageBox.Show($"Erreur : {e.Message}", "Erreur innatendue");
+            MessageBox.Show("Erreur : " + e.Message, "Erreur innatendue");
             _client?.Close();
             return false;
         }
     }
+    private void SendMessageButton(object sender, RoutedEventArgs e)
+    {
+        var message = TxtMessage.Text.Trim();
+        if (string.IsNullOrWhiteSpace(message)) return;
+        Send(message);
+        TxtMessage.Clear();
+    }
 
+    // TODO transformer en envoi de packet avec ID
     private void Send(string message)
     {
         var buffer = Encoding.UTF8.GetBytes(message);
-        _stream.Write(buffer, 0, buffer.Length);
+        Console.WriteLine(buffer);
+        _stream?.Write(buffer, 0, buffer.Length);
     }
-
-    private void SendMessageButton(object sender, RoutedEventArgs e)
-    {
-        var message = txtMessage.Text.Trim();
-        if (string.IsNullOrWhiteSpace(message)) return;
-        Send(message);
-        txtMessage.Clear();
-    }
-
+    
+    // TODO transformer en reçu de packet avec ID
     /// <summary>
-    ///     Permet de recevoir les messages venant du serveur
+    ///     Reçoit les messages venant (des autres clients) du serveur
     /// </summary>
     private void ReceiveMessages()
     {
@@ -70,27 +74,14 @@ public partial class MainWindow : Window
         while (true)
             try
             {
+                if (_stream == null) continue;
                 var bytesRead = _stream.Read(buffer, 0, buffer.Length);
 
                 // Serveur fermé/crash
                 if (bytesRead == 0) break;
 
                 var message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
-                // permet de mettre à jour la liste des clients connectés
-                if (message.StartsWith("/clients"))
-                {
-                    var clients = message[8..].Split(',');
-                    Dispatcher.Invoke(() =>
-                    {
-                        connectedClients.Items.Clear();
-                        foreach (var clientName in clients) connectedClients.Items.Add(clientName);
-                    });
-                }
-                else
-                {
-                    Dispatcher.Invoke(() => listMessages.Items.Add(message));
-                }
+                Dispatcher.Invoke(() => ListMessages.Items.Add(message));
             }
             catch (Exception e)
             {
@@ -109,7 +100,15 @@ public partial class MainWindow : Window
     private void Disconnect()
     {
         if (_client == null) return;
-        _stream.Close();
+        _stream?.Close();
         _client.Close();
     }
+
+    private enum PacketId
+    {
+        CONNECT_TO_SERVER,
+        SEND_MESSAGE,
+        RECEIVE_MESSAGE
+    }
+
 }

@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Chat Client" Height="450" Width="800">
     <Grid>
-        <TextBox Name="txtMessage" Height="30" Margin="300,-80,300,0" VerticalAlignment="Center" />
+        <TextBox Name="TxtMessage" Height="30" Margin="300,-80,300,0" VerticalAlignment="Center" />
         <Button Content="Se connecter" Width="100" Height="35" Click="LoginButton" />
     </Grid>
 </Window>
